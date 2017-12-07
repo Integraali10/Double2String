@@ -1,0 +1,10 @@
+﻿  Assembling sour.asm
+  Generating code
+  2 of 17 functions (11.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+sour.obj : error LNK2017: 'ADDR32' relocation to 'k_comp' invalid without /LARGEADDRESSAWARE:NO
+sour.obj : error LNK2017: 'ADDR32' relocation to 'mants' invalid without /LARGEADDRESSAWARE:NO
+sour.obj : error LNK2017: 'ADDR32' relocation to 'exps' invalid without /LARGEADDRESSAWARE:NO
+LINK : fatal error LNK1165: link failed because of fixup errors

@@ -54,6 +54,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\vsyasm.props" />
+    <Import Project="$(ProgramFiles)\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations\vsyasm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -157,5 +158,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\vsyasm.targets" />
+    <Import Project="$(ProgramFiles)\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations\vsyasm.targets" />
   </ImportGroup>
 </Project>

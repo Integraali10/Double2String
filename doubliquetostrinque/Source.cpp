@@ -368,10 +368,10 @@ extern "C"
 int main()
 {
   //vein();
-  double inf = std::numeric_limits<double>::infinity();
+  double inf = -std::numeric_limits<double>::infinity();
   double y = nan("");
   double x = 0.1+0.11;
-  double o = 0.0;
+  double o = -0.0;
   char a[32];
   char b[32];
   char c[32];
@@ -386,8 +386,16 @@ int main()
   printf("%s\n", c);
   printf("%s\n", f);
   char p[32];
-  dbl2str(&o, p);
+  
+
   printf("ASMIQUE DTOA\n");
+  dbl2str(&o, p);
   printf("%s\n", p);
+  dbl2str(&y, p);
+  printf("%s\n", p);
+  dbl2str(&inf, p);
+  printf("%s\n", p);
+
+
   return 0;
 }
