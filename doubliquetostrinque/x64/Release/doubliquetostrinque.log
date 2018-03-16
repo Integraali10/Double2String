@@ -1,5 +1,15 @@
 ﻿  Assembling doubleasmiquetostr.asm
+doubleasmiquetostr.asm(21): warning : value does not fit in 32 bit field
+doubleasmiquetostr.asm(28): warning : value does not fit in 32 bit field
+doubleasmiquetostr.asm(34): warning : value does not fit in 32 bit field
+doubleasmiquetostr.asm(45): warning : value does not fit in 32 bit field
+  nsfpconv.cpp
+nsfpconv.cpp(74): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+nsfpconv.cpp(234): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+nsfpconv.cpp(260): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
   Generating code
-  All 17 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 19 functions ( 5.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   doubliquetostrinque.vcxproj -> D:\Development und Frustration\ASMIQUE\Double2String\x64\Release\doubliquetostrinque.exe

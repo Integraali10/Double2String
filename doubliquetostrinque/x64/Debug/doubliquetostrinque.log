@@ -1,2 +1,8 @@
 ﻿  Assembling doubleasmiquetostr.asm
+  nsfpconv.cpp
+d:\development und frustration\asmique\double2string\doubliquetostrinque\nsfpconv.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+d:\development und frustration\asmique\double2string\doubliquetostrinque\nsfpconv.cpp(233): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+d:\development und frustration\asmique\double2string\doubliquetostrinque\nsfpconv.cpp(259): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+  Source.cpp
+  Generating Code...
   doubliquetostrinque.vcxproj -> D:\Development und Frustration\ASMIQUE\Double2String\x64\Debug\doubliquetostrinque.exe
