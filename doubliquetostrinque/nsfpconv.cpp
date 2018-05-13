@@ -498,23 +498,23 @@ int main()
     
     long long tijd0 = 0;
     long long tijd1 = 0;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1000000; i++)
     {
-      printf("%i\n", i);
+      //printf("%i\n", i);
       uint64_t neo = distribution(generator);
       double neofid = static_cast<double>(neo);
-      printf("dubbel aantal = %.20e\n", neofid);
+      //printf("dubbel aantal = %.20e\n", neofid);
       char st[28];
       auto sta_time0 = __rdtsc();
       int l = fpconv_dtoa(neofid, st);
       tijd0 += __rdtsc() - sta_time0;
       st[l] = '\0';
-      printf("string aantal C = %s\n", st);
+      //printf("string aantal C = %s\n", st);
       auto sta_time1 = __rdtsc();
       dbl2str(&neofid, st);
       tijd1 += __rdtsc() - sta_time1;
-      printf("string aantal A = %s\n", st);
-      printf("\n\n");
+      //printf("string aantal A = %s\n", st);
+      //printf("\n\n");
     }
     printf("tijd van C   = %llu  ticks\n", tijd0);
     printf("tijd van ASM = %llu  ticks\n", tijd1);
