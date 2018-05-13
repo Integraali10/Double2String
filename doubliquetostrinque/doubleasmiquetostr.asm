@@ -17,36 +17,38 @@ dbl2str:
 	mov [rcx], rax
 	lea rcx, [pointertodbl]
 	mov [rcx], rdx
+	;int3
+	mov r8, rax;
+	mov r10, rax
+	shl r10, 1 ; - NAN check - avoiding sign
+	mov r12,0xFFE0000000000000
+	cmp r10, r12;
+	ja nanch
+	jna negch
+
+nanch:;writing "NaN\0"
+	mov byte[rdx], 4Eh
+	mov byte[rdx+1], 61h
+	mov byte[rdx+2], 4Eh
+	mov byte[rdx+3], 0h
+	jmp pops
 negch:;check sign
 	mov r10, 0x8000000000000000
 	test rax, r10
 	jnz minuch
 pluch:;writing "+"
 	mov byte[rdx], 2Bh
-	jmp beforenanch
+	jmp beforeinfch
 minuch:;writing "-"
 	mov byte[rdx], 2Dh
 	xor rax, r10
-beforenanch:
-	lea r11, byte[rdx+1]; r11 now is a pointer to position after sign in string
-	mov r10, rax
-	shl r10, 1 ; - NAN check - avoiding sign
-	mov r12,0xFFE0000000000000
-	cmp r10, r12;
-	ja nanch
-	jna beforeinfch
-nanch:;writing "nan\0"
-	mov byte[r11], 6Eh
-	mov byte[r11+1], 61h
-	mov byte[r11+2], 6Eh
-	mov byte[r11+3], 0h
-	jmp pops
 beforeinfch:
+	lea r11, byte[rdx+1]; r11 now is a pointer to position after sign in string
 	mov r10 ,0x7FF0000000000000
 	cmp rax, r10
 	jne beforezeroch
-infch:;writing "inf/0"
-	mov byte[r11], 69h
+infch:;writing "Inf/0"
+	mov byte[r11], 49h
 	mov byte[r11+1], 6Eh
 	mov byte[r11+2], 66h
 	mov byte[r11+3], 0h
@@ -54,21 +56,21 @@ infch:;writing "inf/0"
 beforezeroch:;writing "0."
 	mov byte[r11], 30h
 	mov byte[r11+1], 2Eh
-	
 	test rax, rax
 	jnz beforegrisu
 zeroch:
 	mov byte[r11+2], 30h
 	mov byte[r11+3], 0h
 	jmp pops
-
 beforegrisu:
 	lea rbx, byte[r11+2]
 	lea rcx, [pointtochar]
 	mov [rcx], rbx; pointer to position of "_" in "s0._"
 grisu:
+;int3;
+	
 	;FP van ons double 
-	mov r8, rax; f.frac
+	mov rax, r8; f.frac
 	mov rcx, 000FFFFFFFFFFFFFh
 	and r8, rcx
 	mov r9, rax;f.exp
@@ -86,7 +88,6 @@ exbi:
 	neg r12d
 	inc r12d
 	mov r9d, r12d
-
 borderspls:
 	;r12 und r13 for upper b frac und exp
 	;r14 und r15 for lower b frac und exp
@@ -127,6 +128,8 @@ lbound:
 	mov r15d, r13d;
 ;normalise f
 	;;r10 = 0010000000000000h
+	
+	;int3;
 normcicle:
 	test r8, r10
 	jnz normshift
@@ -279,7 +282,7 @@ nopdig0:
 	mov ecx, r13d
 	shl r15, cl
 	add r15, r8
-	
+;int3	
 	lea rcx, [delta]
 	mov rcx, [rcx]
 	cmp r15, rcx 
@@ -551,7 +554,7 @@ section .data
 				  dq   10141204801825835212, 15111572745182864684, 11258999068426240000, 16777216000000000000, 12500000000000000000,  9313225746154785156, 
 				  dq   13877787807814456755, 10339757656912845936, 15407439555097886824, 11479437019748901445, 17105694144590052135, 12744735289059618216,
 				  dq    9495567745759798747, 14149498560666738074, 10542197943230523224, 15709099088952724970, 11704190886730495818, 17440603504673385349,
-				  dq   12994262207056124023,  9681479787123295682,  4426529090290212157, 10748601772107342003, 16016664761464807395, 11933345169920330789,
+				  dq   12994262207056124023,  9681479787123295682, 14426529090290212157, 10748601772107342003, 16016664761464807395, 11933345169920330789,
 				  dq   17782069995880619868, 13248674568444952270,  9871031767461413346, 14708983551653345445, 10959046745042015199, 16330252207878254650,
 				  dq   12166986024289022870, 18130221999122236476, 13508068024458167312, 10064294952495520794, 14996968138956309548, 11173611982879273257,
 				  dq   16649979327439178909, 12405201291620119593,  9242595204427927429, 13772540099066387757, 10261342003245940623, 15290591125556738113,

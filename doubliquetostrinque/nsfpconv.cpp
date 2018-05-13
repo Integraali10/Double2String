@@ -3,9 +3,16 @@
 #include <assert.h> // assert
 #include <math.h> // ceil
 #include <stdio.h> // sprintf
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <string.h>
 #include <limits>
+#include <ctime>
+#include <intrin.h>
+#include <algorithm>
+#include <iostream>
+#include <thread>
+#include <random>
+
 
 #define npowers     87
 #define steppowers  8
@@ -293,7 +300,6 @@ static int grisu2(double d, char* digits, int* K)
   upper.frac--;
 
   *K = -k;
-  //вы сейчас здесь
   return generate_digits(&w, &upper, &lower, digits, K);
 }
 
@@ -372,10 +378,7 @@ static int emit_digits(char* digits, int ndigits, char* dest, int K, bool neg)
   else if (cent) {
     dest[idx++] = '0';
   }
-
   dest[idx++] = exp % 10 + '0';
-
-
   return idx;
 }
 
@@ -411,7 +414,6 @@ int fpconv_dtoa(double d, char dest[26])
 
   int str_len = 0;
   bool neg = false;
-
   if (get_dbits(d) & signmask) {
     dest[0] = '-';
     str_len++;
@@ -432,7 +434,7 @@ int fpconv_dtoa(double d, char dest[26])
   int K = 0; 
   int ndigits = grisu2(d, digits, &K);
  
-  printf("%i k = %i \n", ndigits, K);
+  //printf("%i k = %i \n", ndigits, K);
   str_len += emit_digits(digits, ndigits, dest + str_len, K, neg);
 
   return str_len;
@@ -443,48 +445,79 @@ extern "C"
   void dbl2str(const double *in, char *out_buf);
 }
 
+//template<typename F>
+//long long measure(F&& f){
+//  const auto N = 10;
+//  long long results[N];
+//
+//  long long sum0 = 0;
+//  long long sum1 = 0;
+//  for (auto& r : results) {
+//
+//
+//    unsigned int r30 = RAND_MAX * rand() + rand();
+//    unsigned int  s30 = RAND_MAX * rand() + rand();
+//    unsigned int   t4 = rand() & 0xf;
+//    uint64_t neo = (r30 << 34) + (s30 << 4) + t4;
+//    double neofid = static_cast<double>(neo);
+//    printf("dubbel aantal = %.20e\n", neofid);
+//    char st[28];
+//
+//    std::this_thread::yield();
+//    auto start_time = __rdtsc();
+//    f(&neofid, st);
+//    r = __rdtsc() - start_time;
+//    sum0 += r;
+//  }
+//
+//  return sum0;
+//}
+
 
 int main()
 {
-    double inf = -std::numeric_limits<double>::infinity();
-    double y = +nan("");
-    double x = std::numeric_limits<double>::denorm_min()*pow(2, 67);
-    double o = pow(2, 67);
-    double m = -11;
-    char a[28];
-    char b[28];
-    char c[28];
-    char f[28];
-    char n[28];
-    int l = fpconv_dtoa(x, a);
-    a[l] = '\0';
-    l =  fpconv_dtoa(y, b);
-    b[l] = '\0';
-    l = fpconv_dtoa(m, n);
-    n[l] = '\0';
-    l = fpconv_dtoa(inf, c);
-    c[l] = '\0';
-    l = fpconv_dtoa(o, f);
-    f[l] = '\0';
-    printf("CIQUE   DTOA\n");
-    printf("%s\n", a);
-    printf("%s\n", b);
-    printf("%s\n", c);
-    printf("%s\n", f);
-    printf("%s\n", n);
-    char p[28];
-    printf("ASMIQUE DTOA\n");
-    dbl2str(&y, p);
-    printf("%s\n", p);
+    std::random_device rd;
 
-    dbl2str(&inf, p);
-    printf("%s\n", p);
-    dbl2str(&x, p);
-    printf("%s\n", p);
-    dbl2str(&m, p);
-    printf("%s\n", p);
-    dbl2str(&o, p);
-    printf("%s\n", p);
+    /* Random number generator */
+    std::default_random_engine generator(rd());
+
+    /* Distribution on which to apply the generator */
+    std::uniform_int_distribution<long long unsigned> distribution(0, 0xFFFFFFFFFFFFFFFF);
+
+    double inf = std::numeric_limits<double>::infinity();
+    double y = -nan("");
+    double x = -std::numeric_limits<double>::denorm_min()*pow(2,67);
+    double o = -0.38458580965293175*pow(10,-139);
+    double m = +0.14130596596274385*pow(10, 20);
+    char ste[28];
+    int l = fpconv_dtoa(m, ste);
+    ste[l] = '\0';
+    printf("%s\n", ste);
+    dbl2str(&m, ste);
+    printf("%s\n", ste);
+    
+    long long tijd0 = 0;
+    long long tijd1 = 0;
+    for (int i = 0; i < 10; i++)
+    {
+      printf("%i\n", i);
+      uint64_t neo = distribution(generator);
+      double neofid = static_cast<double>(neo);
+      printf("dubbel aantal = %.20e\n", neofid);
+      char st[28];
+      auto sta_time0 = __rdtsc();
+      int l = fpconv_dtoa(neofid, st);
+      tijd0 += __rdtsc() - sta_time0;
+      st[l] = '\0';
+      printf("string aantal C = %s\n", st);
+      auto sta_time1 = __rdtsc();
+      dbl2str(&neofid, st);
+      tijd1 += __rdtsc() - sta_time1;
+      printf("string aantal A = %s\n", st);
+      printf("\n\n");
+    }
+    printf("tijd van C   = %llu  ticks\n", tijd0);
+    printf("tijd van ASM = %llu  ticks\n", tijd1);
 
     return 0;
 }
