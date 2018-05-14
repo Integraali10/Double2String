@@ -502,7 +502,14 @@ int main()
     {
       printf("%i\n", i);
       uint64_t neo = distribution(generator);
-      double neofid = static_cast<double>(neo);
+      double neofid;
+      char const* cu = reinterpret_cast<char const*>(&neo);
+      char* cd = reinterpret_cast<char*>(&neofid);
+
+      // Copy the bitwise representation from u to d
+      memcpy(cd, cu, sizeof(neo));
+
+      printf("int aantal = %llu\n", neo);
       printf("dubbel aantal = %.20e\n", neofid);
       char st[28];
       auto sta_time0 = __rdtsc();

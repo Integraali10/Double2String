@@ -68,7 +68,6 @@ beforegrisu:
 	mov [rcx], rbx; pointer to position of "_" in "s0._"
 grisu:
 ;int3;
-	
 	;FP van ons double 
 	mov rax, r8; f.frac
 	mov rcx, 000FFFFFFFFFFFFFh
